@@ -1,10 +1,12 @@
 from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
-from sqlalchemy import CHAR, JSON, CheckConstraint, ForeignKey
+from sqlalchemy import CHAR, CheckConstraint, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from tennis_scoreboard.core.models.base import Base
+from tennis_scoreboard.core.vo.score import Score
+from tennis_scoreboard.infrastructure.database.types import ScoreType
 
 if TYPE_CHECKING:
     from tennis_scoreboard.core.models.player import Player
@@ -37,8 +39,8 @@ class Match(Base):
     winner_id: Mapped[int | None] = mapped_column(
         ForeignKey('players.id'), nullable=True
     )
-    score: Mapped[dict[str, dict[str, int]]] = mapped_column(
-        JSON,
+    score: Mapped[Score] = mapped_column(
+        ScoreType,
         nullable=False
     )
 
