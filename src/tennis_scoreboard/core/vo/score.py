@@ -21,6 +21,6 @@ class Sets:
 
 @dataclass
 class Score:
-    sets: Sets = field(default=Sets())
-    games: Games = field(default=Games())
-    points: Points = field(default=Points())
+    sets: Sets = field(default_factory=Sets)
+    games: Games = field(default_factory=Games)
+    points: Points = field(default_factory=Points)
