@@ -27,21 +27,22 @@ class Player(Base):
     )
 
     @validates('name')
-    def validate_name(self, key: str, value: str) -> str:
+    def validate_name(self, _: str, value: str) -> str:
         value = value.strip()
 
         if not 1 <= len(value) <= 100:
             raise Exception('Name must contain between 1 and 100 characters')
 
-        if not all(map(
-            str.isalpha,
-            chain.from_iterable(
-                [
-                    s.split('-')
-                    for s in value.split()
-                ]
+        if not all(
+            map(
+                str.isalpha,
+                chain.from_iterable(
+                    [
+                        s.split('-')
+                        for s in value.split()
+                    ]
+                )
             )
-        )
         ):
             raise Exception('Name must contain only letters and separators')
 
