@@ -1,7 +1,10 @@
 from copy import deepcopy
 
 from tennis_scoreboard.core.models.match import Match
-from tennis_scoreboard.exceptions import MatchAlreadyFinishedError, PlayerNotInMatchError
+from tennis_scoreboard.exceptions import (
+    MatchAlreadyFinishedError,
+    PlayerNotInMatchError,
+)
 
 
 class ScoreService:
