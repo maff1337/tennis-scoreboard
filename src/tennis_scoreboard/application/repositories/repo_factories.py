@@ -10,12 +10,10 @@ from tennis_scoreboard.application.repositories.repo_protocols import (
 
 
 class PlayerRepoFactory(Protocol):
-    @abstractmethod
     def __call__(self, session: Session) -> PlayerRepoProtocol:
         ...
 
 
 class MatchRepoFactory(Protocol):
-    @abstractmethod
     def __call__(self, session: Session) -> MatchRepoProtocol:
         ...
