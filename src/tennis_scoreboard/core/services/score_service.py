@@ -1,7 +1,17 @@
+from copy import deepcopy
+
 from tennis_scoreboard.core.models.match import Match
+from tennis_scoreboard.exceptions import MatchAlreadyFinishedError, PlayerNotInMatchError
 
 
 class ScoreService:
+    SETS_TO_WIN = 2
+    GAMES_TO_WIN_SET = 6
+    TIE_BREAK_AT_GAMES = 6
+    POINTS_TO_WIN_GAME = 4
+    POINTS_TO_WIN_TIE_BREAK = 7
+    MIN_LEAD = 2
+
     def __call__(self, match_: Match, player_name: str) -> None:
         if match_.winner is not None:
             raise MatchAlreadyFinishedError('Cannot process finished match')
@@ -19,19 +29,23 @@ class ScoreService:
         points_diff = first_points - second_points
 
         tie_break = (
-            match_.score.games.first_player == 6
-            and match_.score.games.second_player == 6
+            match_.score.games.first_player == self.TIE_BREAK_AT_GAMES
+            and match_.score.games.second_player == self.TIE_BREAK_AT_GAMES
         )
 
         if tie_break:
-            if first_points >= 7 and points_diff >= 2:
+            if (first_points >= self.POINTS_TO_WIN_TIE_BREAK
+                    and points_diff >= self.MIN_LEAD):
                 self._set_won_by(match_, first_name)
-            elif second_points >= 7 and points_diff <= -2:
+            elif (second_points >= self.POINTS_TO_WIN_TIE_BREAK
+                  and points_diff <= -self.MIN_LEAD):
                 self._set_won_by(match_, second_name)
         else:
-            if first_points >= 4 and points_diff >= 2:
+            if (first_points >= self.POINTS_TO_WIN_GAME
+                    and points_diff >= self.MIN_LEAD):
                 self._game_won_by(match_, first_name)
-            elif second_points >= 4 and points_diff <= -2:
+            elif (second_points >= self.POINTS_TO_WIN_GAME
+                  and points_diff <= -self.MIN_LEAD):
                 self._game_won_by(match_, second_name)
 
         first_games = match_.score.games.first_player
@@ -40,17 +54,19 @@ class ScoreService:
         games_diff = first_games - second_games
 
         if not tie_break:
-            if first_games >= 6 and games_diff >= 2:
+            if (first_games >= self.GAMES_TO_WIN_SET
+                    and games_diff >= self.MIN_LEAD):
                 self._set_won_by(match_, first_name)
-            elif second_games >= 6 and games_diff <= -2:
+            elif (second_games >= self.GAMES_TO_WIN_SET
+                  and games_diff <= -self.MIN_LEAD):
                 self._set_won_by(match_, second_name)
 
         first_sets = match_.score.sets.first_player
         second_sets = match_.score.sets.second_player
 
-        if first_sets == 2:
+        if first_sets == self.SETS_TO_WIN:
             self._match_won_by(match_, first_name)
-        elif second_sets == 2:
+        elif second_sets == self.SETS_TO_WIN:
             self._match_won_by(match_, second_name)
 
     def _point_won_by(self, match_: Match, player_name: str) -> None:
