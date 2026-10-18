@@ -6,6 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from tennis_scoreboard.core.models.base import Base
 from tennis_scoreboard.core.valiators.lang_validator import has_single_alphabet
+from tennis_scoreboard.exceptions import PlayerValidationError
 
 if TYPE_CHECKING:
     from tennis_scoreboard.core.models.match import Match
@@ -31,7 +32,8 @@ class Player(Base):
         value = value.strip()
 
         if not 1 <= len(value) <= 100:
-            raise Exception('Name must contain between 1 and 100 characters')
+            raise PlayerValidationError(
+                'Name must contain between 1 and 100 characters')
 
         if not all(
             map(
@@ -44,9 +46,11 @@ class Player(Base):
                 )
             )
         ):
-            raise Exception('Name must contain only letters and separators')
+            raise PlayerValidationError(
+                'Name must contain only letters and separators')
 
         if not has_single_alphabet(value):
-            raise Exception('Name must use only Latin or Cyrillic letters')
+            raise PlayerValidationError(
+                'Name must use only Latin or Cyrillic letters')
 
         return value
