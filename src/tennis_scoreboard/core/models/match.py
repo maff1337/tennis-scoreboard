@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
-from sqlalchemy import CHAR, CheckConstraint, ForeignKey
+from sqlalchemy import CheckConstraint, ForeignKey, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from tennis_scoreboard.core.models.base import Base
@@ -30,7 +30,7 @@ class Match(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     uuid: Mapped[UUID] = mapped_column(
-        CHAR(36), default=uuid4, nullable=False, unique=True)
+        Uuid, default=uuid4, nullable=False, unique=True)
 
     first_player_id: Mapped[int] = mapped_column(
         ForeignKey('players.id', ondelete='CASCADE'), nullable=False)
