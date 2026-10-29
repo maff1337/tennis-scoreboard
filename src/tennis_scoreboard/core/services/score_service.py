@@ -1,4 +1,4 @@
-from copy import deepcopy
+from sqlalchemy.orm.attributes import flag_modified
 
 from tennis_scoreboard.core.models.match import Match
 from tennis_scoreboard.exceptions import (
@@ -18,8 +18,6 @@ class ScoreService:
     def __call__(self, match_: Match, player_name: str) -> None:
         if match_.winner is not None:
             raise MatchAlreadyFinishedError('Cannot process finished match')
-
-        match_.score = deepcopy(match_.score)
 
         self._point_won_by(match_, player_name)
 
@@ -71,6 +69,8 @@ class ScoreService:
             self._match_won_by(match_, first_name)
         elif second_sets == self.SETS_TO_WIN:
             self._match_won_by(match_, second_name)
+
+        flag_modified(match_, 'score')
 
     def _point_won_by(self, match_: Match, player_name: str) -> None:
         if player_name == match_.first_player.name:
