@@ -2,7 +2,10 @@ from typing import Self
 
 from sqlalchemy.orm import Session, sessionmaker
 
-from tennis_scoreboard.application.repositories.repo_factories import MatchRepoFactory, PlayerRepoFactory
+from tennis_scoreboard.application.repositories.repo_factories import (
+    MatchRepoFactory,
+    PlayerRepoFactory,
+)
 from tennis_scoreboard.application.uow.uow_protocol import UnitOfWork
 
 
@@ -57,7 +60,7 @@ class SqlaUnitOfWork(UnitOfWork):
     def commit(self) -> None:
         self._require_session().commit()
 
-    def ropllback(self) -> None:
+    def rollback(self) -> None:
         self._require_session().rollback()
 
     def _require_session(self) -> Session:
