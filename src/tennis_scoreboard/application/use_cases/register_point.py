@@ -3,9 +3,11 @@ from uuid import UUID
 from tennis_scoreboard.application.dto import MatchDto
 from tennis_scoreboard.application.uow.uow_factory import UowFactory
 from tennis_scoreboard.core.services.score_service import ScoreService
+from tennis_scoreboard.di import inject
 from tennis_scoreboard.exceptions import MatchNotFoundError
 
 
+@inject
 class RegisterPointUseCase:
     def __init__(self, uow_factory: UowFactory, score_service: ScoreService) -> None:
         self._uow_factory = uow_factory

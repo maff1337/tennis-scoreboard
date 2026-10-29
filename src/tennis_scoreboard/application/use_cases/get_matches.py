@@ -1,7 +1,9 @@
 from tennis_scoreboard.application.dto import MatchDto, MatchPage
 from tennis_scoreboard.application.uow.uow_factory import UowFactory
+from tennis_scoreboard.di import inject
 
 
+@inject
 class GetMatchesUseCase:
     PAGE_SIZE = 10
 

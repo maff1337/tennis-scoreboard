@@ -5,9 +5,11 @@ from tennis_scoreboard.application.uow.uow_protocol import UnitOfWork
 from tennis_scoreboard.core.models.match import Match
 from tennis_scoreboard.core.models.player import Player
 from tennis_scoreboard.core.vo.score import Score
+from tennis_scoreboard.di import inject
 from tennis_scoreboard.exceptions import SamePlayersError
 
 
+@inject
 class CreateMatchUseCase:
     def __init__(self, uow_factory: UowFactory) -> None:
         self._uow_factory = uow_factory
@@ -36,7 +38,9 @@ class CreateMatchUseCase:
     @staticmethod
     def _get_or_create(uow: UnitOfWork, name: str) -> Player:
         player = uow.players.get_by_name(name)
+
         if player is None:
             player = Player(name=name)
             uow.players.add(player)
+
         return player
