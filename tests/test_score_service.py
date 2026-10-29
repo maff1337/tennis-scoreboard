@@ -193,9 +193,9 @@ def test_tiebreak_at_8_6_finish_set(
     match_: Match
 ) -> None:
     match_.score.games.first_player = 6
-    match_.score.games.first_player = 6
+    match_.score.games.second_player = 6
     match_.score.points.first_player = 7
-    match_.score.points.first_player = 6
+    match_.score.points.second_player = 6
 
     service(match_, 'First')
 
