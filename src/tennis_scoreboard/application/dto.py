@@ -33,4 +33,4 @@ class MatchPage:
 
     @property
     def pages(self) -> int:
-        return max(1, -(-self.total // self.pages))
+        return max(1, -(-self.total // self.page_size))
