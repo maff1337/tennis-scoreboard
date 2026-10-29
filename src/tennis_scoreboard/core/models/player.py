@@ -5,7 +5,7 @@ from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from tennis_scoreboard.core.models.base import Base
-from tennis_scoreboard.core.valiators.lang_validator import has_single_alphabet
+from tennis_scoreboard.core.validators.lang_validator import has_single_alphabet
 from tennis_scoreboard.exceptions import PlayerValidationError
 
 if TYPE_CHECKING:

@@ -1,4 +1,3 @@
-from abc import abstractmethod
 from typing import Protocol
 
 from sqlalchemy.orm import Session

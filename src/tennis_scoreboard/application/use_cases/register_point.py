@@ -1,7 +1,7 @@
 from uuid import UUID
 
 from tennis_scoreboard.application.dto import MatchDto
-from tennis_scoreboard.application.uow import UowFactory
+from tennis_scoreboard.application.uow.uow_factory import UowFactory
 from tennis_scoreboard.core.services.score_service import ScoreService
 from tennis_scoreboard.exceptions import MatchNotFoundError
 

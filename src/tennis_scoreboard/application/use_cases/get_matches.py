@@ -1,5 +1,5 @@
 from tennis_scoreboard.application.dto import MatchDto, MatchPage
-from tennis_scoreboard.application.uow import UowFactory
+from tennis_scoreboard.application.uow.uow_factory import UowFactory
 
 
 class GetMatchesUseCase:
