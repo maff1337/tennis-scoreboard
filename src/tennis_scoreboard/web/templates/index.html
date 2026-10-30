@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Tennis scoreboard{% endblock %}
+
+{% block content %}
+<section class="home">
+  <h1>Tennis scoreboard</h1>
+  <p>Keep score of a match point by point, or look back at the ones you’ve already played.</p>
+
+  <div class="choices">
+    <a class="choice choice--primary" href="/new-match">
+      <svg class="ball" aria-hidden="true" focusable="false"><use href="#ball"/></svg>
+      <span class="choice__title">New match</span>
+      <span class="choice__text">Pick two players and start counting points.</span>
+    </a>
+    <a class="choice" href="/matches">
+      <span class="choice__title">Matches</span>
+      <span class="choice__text">Finished and ongoing matches. Search by player name.</span>
+    </a>
+  </div>
+</section>
+{% endblock %}

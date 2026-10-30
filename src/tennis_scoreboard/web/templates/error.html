@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ code }} {{ phrase }} – Tennis scoreboard{% endblock %}
+
+{% block content %}
+<section class="error-page">
+  <div class="error-page__code" aria-hidden="true">
+    {% for digit in code|string %}<span class="tile tile--xl">{{ digit }}</span>{% endfor %}
+  </div>
+  <h1>{{ code }} {{ phrase }}</h1>
+  <p>{{ message }}</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="/new-match">Start a match</a>
+    <a class="btn btn-ghost" href="/matches">See all matches</a>
+  </div>
+</section>
+{% endblock %}

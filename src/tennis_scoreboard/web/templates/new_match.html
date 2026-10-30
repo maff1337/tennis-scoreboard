@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% set active = 'new' %}
+{% block title %}Start a match – Tennis scoreboard{% endblock %}
+
+{% block content %}
+<section class="intro">
+  <h1>Start a match</h1>
+  <p>Best of three sets, with a tie-break at 6:6. Players you haven’t used before are added automatically.</p>
+</section>
+
+{% if error %}
+<div class="alert" role="alert">
+  <p class="alert__title">Couldn’t start the match</p>
+  <p>{{ error }}</p>
+</div>
+{% endif %}
+
+<form class="matchup" method="post" action="/new-match" data-once>
+  <div class="field">
+    <label for="first_player_name">First player</label>
+    <input id="first_player_name" name="first_player_name" type="text" value="{{ first }}"
+           maxlength="100" required autocomplete="off" autofocus>
+  </div>
+
+  <span class="matchup__vs" aria-hidden="true">vs</span>
+
+  <div class="field">
+    <label for="second_player_name">Second player</label>
+    <input id="second_player_name" name="second_player_name" type="text" value="{{ second }}"
+           maxlength="100" required autocomplete="off">
+  </div>
+
+  <p class="matchup__hint">Use letters from one alphabet, Latin or Cyrillic. Spaces and hyphens are fine, up to 100 characters.</p>
+
+  <button class="btn btn-primary" type="submit">Start match</button>
+</form>
+{% endblock %}
