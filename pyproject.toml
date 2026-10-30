@@ -8,8 +8,10 @@ authors = [
 ]
 requires-python = ">=3.13"
 dependencies = [
+    "jinja2>=3.1.6",
     "pymysql>=1.2.3",
     "sqlalchemy>=2.1.2",
+    "waitress>=3.0.2",
 ]
 
 [project.scripts]
@@ -18,3 +20,9 @@ tennis = "tennis_scoreboard:main"
 [build-system]
 requires = ["uv_build>=0.12.3,<0.13.0"]
 build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.16.10",
+]

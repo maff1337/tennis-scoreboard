@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}{{ match.first_player }} vs {{ match.second_player }} – Tennis scoreboard{% endblock %}
+
+{% block content %}
+{% set first = match.first_player %}
+{% set second = match.second_player %}
+{% set sc = match.score %}
+{% set tie_break = sc.games.first_player == 6 and sc.games.second_player == 6 %}
+
+<section class="match-head">
+  <h1>{{ first }} vs {{ second }}</h1>
+  <p>{% if match.winner %}Final score{% else %}Match in play{% endif %}</p>
+</section>
+
+<div class="board" data-match="{{ match.uuid }}">
+  <table>
+    <caption class="visually-hidden">{% if match.winner %}Final score{% else %}Current score{% endif %}</caption>
+    <thead>
+      <tr>
+        <th scope="col"><span class="visually-hidden">Player</span></th>
+        <th scope="col">Sets</th>
+        {% if not match.winner %}
+        <th scope="col">Games</th>
+        <th scope="col">Points</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      <tr{% if match.winner == first %} class="is-winner"{% endif %}>
+        <th scope="row">
+          <span class="player">
+            {% if match.winner == first %}<svg class="ball" aria-hidden="true" focusable="false"><use href="#ball"/></svg><span class="visually-hidden">Winner: </span>{% endif %}{{ first }}
+          </span>
+        </th>
+        <td><span class="tile" data-tile="s1">{{ sc.sets.first_player }}</span></td>
+        {% if not match.winner %}
+        <td><span class="tile" data-tile="g1">{{ sc.games.first_player }}</span></td>
+        <td><span class="tile" data-tile="p1">{{ points[0] }}</span></td>
+        {% endif %}
+      </tr>
+      <tr{% if match.winner == second %} class="is-winner"{% endif %}>
+        <th scope="row">
+          <span class="player">
+            {% if match.winner == second %}<svg class="ball" aria-hidden="true" focusable="false"><use href="#ball"/></svg><span class="visually-hidden">Winner: </span>{% endif %}{{ second }}
+          </span>
+        </th>
+        <td><span class="tile" data-tile="s2">{{ sc.sets.second_player }}</span></td>
+        {% if not match.winner %}
+        <td><span class="tile" data-tile="g2">{{ sc.games.second_player }}</span></td>
+        <td><span class="tile" data-tile="p2">{{ points[1] }}</span></td>
+        {% endif %}
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+{% if match.winner %}
+<section class="result">
+  <h2>
+    <svg class="ball" aria-hidden="true" focusable="false"><use href="#ball"/></svg>
+    {{ match.winner }} wins the match
+  </h2>
+  <div class="actions">
+    <a class="btn btn-primary" href="/new-match">Start a new match</a>
+    <a class="btn btn-ghost" href="/matches">See all matches</a>
+  </div>
+</section>
+{% else %}
+<p class="status" aria-live="polite">
+  {%- if tie_break %}Tie-break: first to 7 points, with a two-point lead.
+  {%- elif points[0] == '40' and points[1] == '40' %}Deuce.
+  {%- elif points[0] == 'Ad' %}Advantage {{ first }}.
+  {%- elif points[1] == 'Ad' %}Advantage {{ second }}.
+  {%- endif -%}
+</p>
+
+<form class="points" method="post" action="/match-score?{{ {'uuid': match.uuid}|urlencode }}" data-once>
+  <p class="points__prompt">Who won the point?</p>
+  <button class="point-btn" type="submit" name="winner_name" value="{{ first }}">
+    <span>Point to</span><strong>{{ first }}</strong>
+  </button>
+  <button class="point-btn" type="submit" name="winner_name" value="{{ second }}">
+    <span>Point to</span><strong>{{ second }}</strong>
+  </button>
+</form>
+{% endif %}
+{% endblock %}

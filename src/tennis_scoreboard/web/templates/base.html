@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>{% block title %}Tennis scoreboard{% endblock %}</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@600;700&family=Fira+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/static/style.css?v=1">
+  <script src="/static/app.js?v=1" defer></script>
+</head>
+<body>
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="ball" viewBox="0 0 32 32">
+      <circle cx="16" cy="16" r="15" fill="#dfe64a"/>
+      <path d="M4.2 6.5c5 3.6 8 8.2 8 14.3 0 3.3-.8 6-2.2 8.6M27.8 25.5c-5-3.6-8-8.2-8-14.3 0-3.3.8-6 2.2-8.6"
+            fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+
+  <a class="skip" href="#content">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap site-header__bar">
+      <a class="brand" href="/">
+        <svg class="ball" aria-hidden="true" focusable="false"><use href="#ball"/></svg>
+        Tennis scoreboard
+      </a>
+      <nav aria-label="Main">
+        <a href="/new-match"{% if active == 'new' %} aria-current="page"{% endif %}>New match</a>
+        <a href="/matches"{% if active == 'matches' %} aria-current="page"{% endif %}>Matches</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="content">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

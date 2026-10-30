@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% set active = 'matches' %}
+{% block title %}Matches – Tennis scoreboard{% endblock %}
+
+{% block content %}
+<h1>Matches</h1>
+
+<form class="search" method="get" action="/matches" role="search">
+  <label class="visually-hidden" for="player-name">Player name</label>
+  <input id="player-name" name="player-name" type="search" value="{{ player_name }}"
+         placeholder="Search by player name" autocomplete="off">
+  <button class="btn btn-primary" type="submit">Search</button>
+  {% if player_name %}<a class="btn btn-ghost" href="/matches">Clear search</a>{% endif %}
+</form>
+
+{% if result.items %}
+<p class="summary">
+  {{ result.total }} {{ 'match' if result.total == 1 else 'matches' }}{% if player_name %} with {{ player_name }}{% endif %}
+</p>
+
+<ul class="list">
+  {% for m in result.items %}
+  <li>
+    <a class="match-row{% if m.winner %} is-over{% endif %}" href="/match-score?{{ {'uuid': m.uuid}|urlencode }}">
+      <span class="match-row__name{% if m.winner == m.first_player %} is-winner{% endif %}">
+        {% if m.winner == m.first_player %}<svg class="ball" aria-hidden="true" focusable="false"><use href="#ball"/></svg><span class="visually-hidden">Winner: </span>{% endif %}{{ m.first_player }}
+      </span>
+      <span class="match-row__score tile tile--sm">{{ m.score.sets.first_player }}</span>
+      <span class="match-row__name{% if m.winner == m.second_player %} is-winner{% endif %}">
+        {% if m.winner == m.second_player %}<svg class="ball" aria-hidden="true" focusable="false"><use href="#ball"/></svg><span class="visually-hidden">Winner: </span>{% endif %}{{ m.second_player }}
+      </span>
+      <span class="match-row__score tile tile--sm">{{ m.score.sets.second_player }}</span>
+      <span class="match-row__state">{% if m.winner %}Finished{% else %}In play{% endif %}</span>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+
+{% if result.pages > 1 %}
+<nav class="pager" aria-label="Pages">
+  {% if result.page > 1 %}
+  <a class="btn btn-ghost" href="/matches?{{ {'player-name': player_name, 'page': result.page - 1}|urlencode }}">Previous</a>
+  {% else %}
+  <span class="btn btn-ghost" aria-disabled="true">Previous</span>
+  {% endif %}
+
+  <span>Page {{ result.page }} of {{ result.pages }}</span>
+
+  {% if result.page < result.pages %}
+  <a class="btn btn-ghost" href="/matches?{{ {'player-name': player_name, 'page': result.page + 1}|urlencode }}">Next</a>
+  {% else %}
+  <span class="btn btn-ghost" aria-disabled="true">Next</span>
+  {% endif %}
+</nav>
+{% endif %}
+
+{% else %}
+<div class="empty">
+  {% if player_name %}
+  <p>No matches found for “{{ player_name }}”. Check the spelling or clear the search.</p>
+  <a class="btn btn-ghost" href="/matches">Clear search</a>
+  {% elif result.page > 1 %}
+  <p>There are no matches on this page.</p>
+  <a class="btn btn-ghost" href="/matches">Go to the first page</a>
+  {% else %}
+  <p>No matches yet. Start the first one.</p>
+  <a class="btn btn-primary" href="/new-match">Start a match</a>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}
